@@ -1,18 +1,35 @@
 # claude-code-statusline
 
-A script that uses Claude Code's `statusLine` feature to show session cost, context-window usage, and (for Pro/Max subscription plans) 5-hour/weekly rate-limit consumption live in the terminal status line. No third-party extensions - runs entirely locally.
+![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)
+![Shell: Bash](https://img.shields.io/badge/shell-bash-89e051.svg)
+![Platform](https://img.shields.io/badge/platform-linux%20%7C%20macos-lightgrey.svg)
+![Dependencies](https://img.shields.io/badge/deps-jq%20%2B%20bc-orange.svg)
+
+**See your Claude Code spend before it surprises you.** A drop-in `statusLine` script that shows session cost, context-window usage, and (on Pro/Max) your 5-hour/weekly rate-limit consumption — live, in the terminal, with zero third-party extensions and zero network calls.
+
+---
 
 ## Preview
+
+Default (`USAGE_FORMAT=percent`):
 
 ```
 $1.8000 | ctx 9% | in:2 out:333 cache:84959 | 5h 59% (resets 14:20) · wk 35% (resets 07/20 21:00)
 ```
 
-Colors shift green/yellow/red based on thresholds; ⚠️ appears at 80%+, and 💸 appears once cost passes `COST_CRIT_USD`.
+With `USAGE_FORMAT=both`:
+
+```
+$1.8000 | ctx ████░░░░░░ 9% | in:2 out:333 cache:84959 | 5h ██████░░░░ 59% (resets 14:20) · wk ████░░░░░░ 35% (resets 07/20 21:00)
+```
+
+Colors shift 🟢 green → 🟡 yellow → 🔴 red as thresholds are crossed; ⚠️ appears at 80%+, and 💸 appears once cost passes `COST_CRIT_USD`. Every color, icon, threshold, and segment is configurable - see [Customization](#customization).
+
+---
 
 ## Requirements
 
-`jq` and `bc` must be installed. If either is missing, the status line will show raw `command not found` errors.
+`jq` and `bc` must be installed. If either is missing, the status line will show raw `command not found` errors instead of failing quietly.
 
 ```bash
 # Debian/Ubuntu
@@ -26,9 +43,9 @@ brew install jq bc
 
 | Platform | Status |
 |---|---|
-| Linux | Works out of the box. |
-| macOS | Works once `jq`/`bc` are installed via Homebrew. The script detects GNU vs. BSD `date` automatically, so reset times (`resets 14:20`) render correctly on both. |
-| Windows | Not supported natively - it's a bash script. Use **WSL** (behaves exactly like Linux). Git Bash/MSYS2 may work but you'll need to install `jq` and `bc` separately (`bc` in particular has no official Windows build, so it may be hard to source). |
+| 🐧 Linux | Works out of the box. |
+| 🍎 macOS | Works once `jq`/`bc` are installed via Homebrew. The script detects GNU vs. BSD `date` automatically, so reset times (`resets 14:20`) render correctly on both. |
+| 🪟 Windows | Not supported natively - it's a bash script. Use **WSL** (behaves exactly like Linux). Git Bash/MSYS2 may work but you'll need to install `jq` and `bc` separately (`bc` in particular has no official Windows build, so it may be hard to source). |
 
 ## Install
 
@@ -63,7 +80,8 @@ brew install jq bc
 | `5h X%` | 5-hour rolling session rate-limit consumption (subscription plans only) |
 | `wk X%` | 7-day weekly rate-limit consumption (subscription plans only) |
 
-`resets_at` is delivered as a UTC Unix timestamp; the `(resets ...)` times shown for `5h`/`wk` are converted to your system's local timezone (or `TZ`, if set) - the same convention `/usage` uses (e.g. "Resets 2:19pm (Asia/Seoul)").
+> [!NOTE]
+> `resets_at` is delivered as a UTC Unix timestamp; the `(resets ...)` times shown for `5h`/`wk` are converted to your system's local timezone (or `TZ`, if set) - the same convention `/usage` uses (e.g. "Resets 2:19pm (Asia/Seoul)").
 
 ## Customization
 
@@ -75,6 +93,7 @@ Drop in a config file and it's picked up automatically. The first file found in 
 
 Copy `statusline.conf.example`, `statusline.json.example`, or `statusline.yaml.example` from this repo under your preferred name to get started.
 
+> [!TIP]
 > To avoid requiring a separate parser like `yq`, YAML is handled by a **minimal flat parser** with no dependency beyond the `jq`/`bc` already in use. It doesn't support nesting or lists - only single-line `KEY: value` entries. If you need anything more complex, use the JSON config instead (parsed by `jq`, so it's more robust).
 
 ### Options
@@ -95,7 +114,10 @@ Copy `statusline.conf.example`, `statusline.json.example`, or `statusline.yaml.e
 
 ## Known limitations
 
+> [!WARNING]
+> A few rough edges to know about before you rely on this for anything important.
+
 - **Per-model (Opus/Sonnet/Fable) weekly limits are not shown.** The `/usage` command displays per-model breakdowns (e.g. "Current week (Fable)"), but those values only come from a separate account-status API that `/usage` calls on its own. The JSON payload passed to `statusLine` only includes the aggregate `five_hour` / `seven_day` fields, not per-model fields. Run `/usage` directly if you need per-model consumption.
-- The `rate_limits` field isn't documented in Anthropic's official docs - it was found by inspecting the installed Claude Code binary's internal code. Field names or structure may change in future Claude Code versions.
-- API-key (pay-as-you-go) users never receive the `rate_limits` field, so the `5h`/`wk` items are automatically omitted.
+- **The `rate_limits` field isn't officially documented.** It was found by inspecting the installed Claude Code binary's internal code, not Anthropic's docs. Field names or structure may change in future Claude Code versions.
+- **API-key (pay-as-you-go) users never receive `rate_limits`**, so the `5h`/`wk` items are automatically omitted.
 - **`5h`/`wk` can show different numbers across concurrent sessions of the same account.** These are account-wide quotas, but each session only displays the rate-limit snapshot from *its own* last API response - an idle session keeps showing an old (possibly even previous-window) snapshot until it makes another request. If two windows disagree, the one with the more recent message is the accurate one; send any message in the stale one to refresh it.
