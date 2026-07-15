@@ -63,6 +63,8 @@ brew install jq bc
 | `5h X%` | 5-hour rolling session rate-limit consumption (subscription plans only) |
 | `wk X%` | 7-day weekly rate-limit consumption (subscription plans only) |
 
+`resets_at` is delivered as a UTC Unix timestamp; the `(resets ...)` times shown for `5h`/`wk` are converted to your system's local timezone (or `TZ`, if set) - the same convention `/usage` uses (e.g. "Resets 2:19pm (Asia/Seoul)").
+
 ## Customization
 
 Drop in a config file and it's picked up automatically. The first file found in this order wins (or set an explicit path with the `STATUSLINE_CONFIG` env var):
