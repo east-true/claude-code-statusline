@@ -88,7 +88,3 @@ Copy `statusline.conf.example`, `statusline.json.example`, or `statusline.yaml.e
 - **Per-model (Opus/Sonnet/Fable) weekly limits are not shown.** The `/usage` command displays per-model breakdowns (e.g. "Current week (Fable)"), but those values only come from a separate account-status API that `/usage` calls on its own. The JSON payload passed to `statusLine` only includes the aggregate `five_hour` / `seven_day` fields, not per-model fields. Run `/usage` directly if you need per-model consumption.
 - The `rate_limits` field isn't documented in Anthropic's official docs - it was found by inspecting the installed Claude Code binary's internal code. Field names or structure may change in future Claude Code versions.
 - API-key (pay-as-you-go) users never receive the `rate_limits` field, so the `5h`/`wk` items are automatically omitted.
-
-## License
-
-MIT
