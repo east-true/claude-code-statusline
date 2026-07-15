@@ -100,16 +100,22 @@ color_for_cost() {
   fi
 }
 
+# tries GNU date syntax first, falls back to BSD date (macOS) syntax
+fmt_epoch() {
+  local epoch="${1%%.*}" fmt="$2"
+  date -d "@${epoch}" "$fmt" 2>/dev/null || date -r "${epoch}" "$fmt" 2>/dev/null
+}
+
 fmt_reset() {
   local epoch="$1"
   [ -z "$epoch" ] && return
-  date -d "@${epoch%%.*}" "+%H:%M" 2>/dev/null
+  fmt_epoch "$epoch" "+%H:%M"
 }
 
 fmt_reset_with_date() {
   local epoch="$1"
   [ -z "$epoch" ] && return
-  date -d "@${epoch%%.*}" "+%m/%d %H:%M" 2>/dev/null
+  fmt_epoch "$epoch" "+%m/%d %H:%M"
 }
 
 render_bar() {

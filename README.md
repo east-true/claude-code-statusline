@@ -22,6 +22,14 @@ sudo apt install jq bc
 brew install jq bc
 ```
 
+## Platform support
+
+| Platform | Status |
+|---|---|
+| Linux | Works out of the box. |
+| macOS | Works once `jq`/`bc` are installed via Homebrew. The script detects GNU vs. BSD `date` automatically, so reset times (`resets 14:20`) render correctly on both. |
+| Windows | Not supported natively - it's a bash script. Use **WSL** (behaves exactly like Linux). Git Bash/MSYS2 may work but you'll need to install `jq` and `bc` separately (`bc` in particular has no official Windows build, so it may be hard to source). |
+
 ## Install
 
 1. Copy `statusline.sh` to `~/.claude/statusline.sh` and make it executable.
