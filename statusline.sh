@@ -79,7 +79,7 @@ else
 fi
 
 case "$ICON_STYLE" in
-  emoji) WARN_ICON=" ⚠️"; MONEY_ICON=" 💸" ;;
+  emoji) WARN_ICON=" ${WARN_ICON:-⚠️}"; MONEY_ICON=" ${MONEY_ICON:-💸}" ;;
   text)  WARN_ICON=" [WARN]"; MONEY_ICON=" [HIGH]" ;;
   *)     WARN_ICON=""; MONEY_ICON="" ;;
 esac

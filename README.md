@@ -107,6 +107,7 @@ Copy `statusline.conf.example`, `statusline.json.example`, or `statusline.yaml.e
 | `USAGE_FORMAT` | `percent` | How percentages are rendered: `percent` (`59%`) / `bar` (`██████░░░░`) / `both` (`██████░░░░ 59%`) |
 | `BAR_WIDTH` | `10` | Bar length for `bar`/`both` formats |
 | `ICON_STYLE` | `emoji` | Warning icon style: `emoji` (⚠️/💸) / `text` (`[WARN]`/`[HIGH]`) / `none` |
+| `WARN_ICON` / `MONEY_ICON` | `⚠️` / `💸` | Which emoji to use *when `ICON_STYLE=emoji`* (ignored for `text`/`none`) |
 | `USE_COLOR` | `true` | Whether to use ANSI colors |
 | `SEPARATOR` | `" \| "` | String placed between segments |
 | `COST_WARN_USD` / `COST_CRIT_USD` | `3` / `8` | Cost warning/critical thresholds (USD) |

@@ -15,6 +15,10 @@ BAR_WIDTH=10
 # Icon style for warnings: emoji | text | none
 ICON_STYLE=emoji
 
+# Which emoji to use when ICON_STYLE=emoji (ignored for text/none)
+WARN_ICON=⚠️
+MONEY_ICON=💸
+
 # Colors on/off
 USE_COLOR=true
 

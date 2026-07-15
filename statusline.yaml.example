@@ -12,6 +12,8 @@ USAGE_FORMAT: percent
 BAR_WIDTH: 10
 
 ICON_STYLE: emoji
+WARN_ICON: ⚠️
+MONEY_ICON: 💸
 USE_COLOR: true
 SEPARATOR: " | "
 
