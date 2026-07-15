@@ -10,6 +10,18 @@ $1.8000 | ctx 9% | in:2 out:333 cache:84959 | 5h 59% (resets 14:20) · wk 35% (r
 
 색상은 임계값에 따라 초록/노랑/빨강으로 바뀌고, 80% 이상이면 ⚠️, 비용이 `COST_CRIT_USD` 이상이면 💸가 붙습니다.
 
+## 요구사항
+
+`jq`, `bc`가 설치되어 있어야 합니다. 둘 중 하나라도 없으면 상태줄에 `command not found` 에러가 그대로 노출됩니다.
+
+```bash
+# Debian/Ubuntu
+sudo apt install jq bc
+
+# macOS
+brew install jq bc
+```
+
 ## 설치
 
 1. `statusline.sh`를 `~/.claude/statusline.sh`로 복사하고 실행 권한을 줍니다.
