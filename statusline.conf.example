@@ -1,0 +1,28 @@
+# Copy to ~/.claude/statusline.conf and edit. Any line you omit keeps its default.
+
+# Which segments to show
+SHOW_COST=true
+SHOW_CONTEXT=true
+SHOW_RATE_LIMITS=true
+
+# Order segments are displayed in (comma-separated: cost,context,rate_limits)
+SEGMENT_ORDER=cost,context,rate_limits
+
+# How usage percentages are rendered: percent | bar | both
+USAGE_FORMAT=percent
+BAR_WIDTH=10
+
+# Icon style for warnings: emoji | text | none
+ICON_STYLE=emoji
+
+# Colors on/off
+USE_COLOR=true
+
+# String placed between segments
+SEPARATOR=" | "
+
+# Thresholds
+COST_WARN_USD=3
+COST_CRIT_USD=8
+WARN_PCT=50
+CRIT_PCT=80

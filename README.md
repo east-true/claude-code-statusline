@@ -55,9 +55,33 @@ brew install jq bc
 | `5h X%` | 5시간 롤링 세션 rate limit 소진율 (구독 플랜에서만 표시) |
 | `wk X%` | 7일 주간 rate limit 소진율 (구독 플랜에서만 표시) |
 
-## 임계값 커스터마이징
+## 커스터마이징
 
-`COST_WARN_USD`, `COST_CRIT_USD` 환경변수로 비용 경고 임계값을 바꿀 수 있습니다 (기본값 3 / 8 USD). 컨텍스트·rate limit 퍼센트 임계값(50%/80%)은 스크립트 내 `color_for_pct` 함수에서 직접 수정하세요.
+설정 파일을 두면 적용됩니다. 아래 순서로 첫 번째로 존재하는 파일을 사용합니다 (`STATUSLINE_CONFIG` 환경변수로 경로를 직접 지정할 수도 있습니다):
+
+1. `~/.claude/statusline.conf` (셸 변수 형식)
+2. `~/.claude/statusline.json`
+3. `~/.claude/statusline.yml` / `~/.claude/statusline.yaml`
+
+레포에 있는 `statusline.conf.example`, `statusline.json.example`, `statusline.yaml.example`을 원하는 이름으로 복사해서 시작하세요.
+
+> YAML은 `yq` 같은 별도 파서를 추가로 요구하지 않기 위해, 이미 쓰고 있는 `jq`/`bc` 외 새 의존성 없는 **최소 플랫(flat) 파서**로 처리합니다. 중첩 구조나 리스트는 지원하지 않고 `KEY: value` 한 줄짜리 항목만 인식합니다. 더 복잡한 YAML이 필요하면 JSON 설정을 쓰세요 (`jq`로 처리되어 더 견고합니다).
+
+### 옵션
+
+| 옵션 | 기본값 | 설명 |
+|---|---|---|
+| `SHOW_COST` | `true` | 비용 세그먼트 표시 여부 |
+| `SHOW_CONTEXT` | `true` | 컨텍스트 사용률 세그먼트 표시 여부 |
+| `SHOW_RATE_LIMITS` | `true` | 구독 rate limit 세그먼트 표시 여부 |
+| `SEGMENT_ORDER` | `cost,context,rate_limits` | 세그먼트 표시 순서 (콤마 구분, 목록에 없는 항목은 숨겨짐) |
+| `USAGE_FORMAT` | `percent` | 퍼센트 표현 방식: `percent`(`59%`) / `bar`(`██████░░░░`) / `both`(`██████░░░░ 59%`) |
+| `BAR_WIDTH` | `10` | `bar`/`both` 포맷일 때 막대 길이 |
+| `ICON_STYLE` | `emoji` | 경고 아이콘 스타일: `emoji`(⚠️/💸) / `text`(`[WARN]`/`[HIGH]`) / `none` |
+| `USE_COLOR` | `true` | ANSI 색상 사용 여부 |
+| `SEPARATOR` | `" \| "` | 세그먼트 사이 구분 문자열 |
+| `COST_WARN_USD` / `COST_CRIT_USD` | `3` / `8` | 비용 경고·위험 임계값 (USD) |
+| `WARN_PCT` / `CRIT_PCT` | `50` / `80` | 사용률(컨텍스트·rate limit) 경고·위험 임계값 (%) |
 
 ## 알려진 제한사항
 
